@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BJ45E2H3LV"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-BJ45E2H3LV');
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sourdough Baking Calculator</title>
@@ -73,7 +65,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Sourdough Baking Calculator</h1>
+    <h1>Sourdough Baking Calculator <i class="fa-solid fa-bread-slice"></i></h1>
     <div class="row">
       <div class="col-md-4">
         <div class="form-group">
@@ -100,7 +92,7 @@
       </div>
     </div>
     <div class="form-group">
-      <button onclick="calculateSchedule()" class="btn btn-primary">Calculate Schedule</button>
+      <button onclick="calculateSchedule()" class="btn btn-primary">Calculate Schedule <i class="fa-solid fa-bread-slice"></i></button>
     </div>
     <hr> <!-- Divider added here -->
   </div>
@@ -117,7 +109,7 @@
       const peakTimeInput = parseInt(document.getElementById("peakTime").value) || 5; // Default to 5 hours if input is empty
       const startTimeInput = document.getElementById("startTime").value;
       const startTime = startTimeInput ? new Date(startTimeInput) : new Date(); // Use selected start time or current time
-      
+
       const peakTimeOptions = {
         "1:1:1": 5,
         "1:2:2": 9,
@@ -128,7 +120,8 @@
       const peakTime = new Date(startTime.getTime() + peakTimeOptions[starterRatioInput] * 60 * 60 * 1000); // Peak time after specified hours
       const starterReady = new Date(startTime.getTime() + peakTimeOptions[starterRatioInput] * 60 * 60 * 1000); // Time now plus time to peak
       const autolyseTime = new Date(starterReady.getTime()); // Start autolyse when starter is ready
-      const fold1Time = new Date(autolyseTime.getTime() + 30 * 60 * 1000); // 30 minutes after autolyse
+      const mixIngredientsTime = new Date(autolyseTime.getTime() + 30 * 60 * 1000); // Mix ingredients 5 minutes after autolyse
+      const fold1Time = new Date(mixIngredientsTime.getTime() + 30 * 60 * 1000); // 30 minutes after autolyse
       const fold2Time = new Date(fold1Time.getTime() + 30 * 60 * 1000); // 30 minutes after first folding
       const fold3Time = new Date(fold2Time.getTime() + 30 * 60 * 1000); // 30 minutes after second folding
       const waitTimeStart = new Date(fold3Time.getTime()); // Start wait time after third folding
@@ -138,7 +131,7 @@
         const preShapeTime = new Date(waitTimeStart.getTime() + i * 60 * 60 * 1000); // Pre-shape after 1, 2, and 3 hours
         preShapeTimes.push(preShapeTime);
       }
-      
+
       const shapeTimeOptions = [];
       for (let i = 0; i < preShapeTimes.length; i++) {
         const shapeTime = new Date(preShapeTimes[i].getTime() + 15 * 60 * 1000); // Shape after 15 minutes of pre-shape
@@ -157,15 +150,19 @@
           <div class="wait-time">Wait ${formatWaitTime(0.5)}</div>
         </div>
         <div class="time-box">
-          <p><i class="fas fa-cube"></i> Fold 1: ${formatTime(fold1Time)}</p>
+          <p><i class="fa-solid fa-blender"></i> Mix Ingredients: ${formatTime(mixIngredientsTime)}</p>
           <div class="wait-time">Wait ${formatWaitTime(0.5)}</div>
         </div>
         <div class="time-box">
-          <p><i class="fas fa-cube"></i> Fold 2: ${formatTime(fold2Time)}</p>
+          <p><i class="fa-solid fa-hand-holding-heart"></i> Fold 1: ${formatTime(fold1Time)}</p>
           <div class="wait-time">Wait ${formatWaitTime(0.5)}</div>
         </div>
         <div class="time-box">
-          <p><i class="fas fa-cube"></i> Fold 3: ${formatTime(fold3Time)}</p>
+          <p><i class="fa-solid fa-hand-holding-heart"></i> Fold 2: ${formatTime(fold2Time)}</p>
+          <div class="wait-time">Wait ${formatWaitTime(0.5)}</div>
+        </div>
+        <div class="time-box">
+          <p><i class="fa-solid fa-hand-holding-heart"></i> Fold 3: ${formatTime(fold3Time)}</p>
           <div class="wait-time">Wait 1 to 3 hours</div>
         </div>
         <div class="time-box">
@@ -176,7 +173,7 @@
           <div class="wait-time">Wait ${formatWaitTime(0.25)}</div>
         </div>
         <div class="time-box">
-          <p><i class="fas fa-dough"></i> Shape:</p>
+          <p><i class="fa-solid fa-shapes"></i> Final Shape:</p>
           <ul>
             ${shapeTimeOptions.map(time => `<li>${formatTime(time)}</li>`).join('')}
           </ul>
@@ -187,25 +184,9 @@
       `;
       document.getElementById("schedule").innerHTML = schedule;
 
-      const scheduleSummary = `
-        Autolyse Start: ${formatTime(autolyseTime)}
-        Wait ${formatWaitTime(0.5)}
-        Fold 1: ${formatTime(fold1Time)}
-        Wait ${formatWaitTime(0.5)}
-        Fold 2: ${formatTime(fold2Time)}
-        Wait ${formatWaitTime(0.5)}
-        Fold 3: ${formatTime(fold3Time)}
-        Wait 1 to 3 hours
-        Pre-Shape:
-        ${preShapeTimes.map(time => formatTime(time)).join('\n')}
-        Wait ${formatWaitTime(0.25)}
-        Shape:
-        ${shapeTimeOptions.map(time => formatTime(time)).join('\n')}
-        Fridge Time: from 6 to 24 hours
-      `;
-      document.getElementById("scheduleSummary").value = scheduleSummary;
+
     }
-    
+
     function updatePeakTime() {
       const starterRatioInput = document.getElementById("starterRatio").value;
       const peakTimeOptions = {
